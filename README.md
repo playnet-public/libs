@@ -56,6 +56,19 @@ If you want to define a HTTP problem, you can do it like this:
 var problemNotFound = problems.New().SetTitle("NotFound").SetDetail("The requested url was not found.").SetStatus(404).SetType("https://example.com/problem/description")
 ```
 
+For custom fields for more detailed problem information, you can implement `Problem` in your custom struct:
+
+```go
+type customInfo struct {
+    AdditionalField1 bool `json:"additional_field_1"`
+}
+
+type customProblem struct {
+    *problems.Problem
+    *customInfo
+}
+```
+
 ## Contributions
 
 Pull Requests and Issue Reports are welcome.
