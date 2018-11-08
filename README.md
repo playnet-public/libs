@@ -1,4 +1,5 @@
 # PlayNet Libs
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/playnet-public/libs)](https://goreportcard.com/report/github.com/playnet-public/libs)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/playnet-public/libs.svg?branch=master)](https://travis-ci.org/playnet-public/libs)
@@ -9,7 +10,8 @@ The repository containing various shared libs for the entire playnet project.
 ## Libs
 
 ### Logging
-Our logging setup using go.uber.org/zap.
+
+Our logging setup using `go.uber.org/zap`.
 Sentry and Jaeger are being added for production environments.
 
 ```go
@@ -26,6 +28,33 @@ When the log level is Error or worse, a sentry message is being sent containing 
 If you provide a zap.Error tag, the related stacktrace will also be attached.
 
 Additionally there is a tracer(opentracing/jaeger) available in the logger which should be closed before exiting main.
+
+### Problems
+
+`problems` is a small library which implements the RFC7807 error response format standard for e.g. HTTP API's.
+
+The `problems` lib provides a struct called `Problem` and an interface called `ProblemInfo`.
+`Problem` implements the `error` interface, so you can simply return the problem as an error in your application.
+
+```go
+func returnError() error {
+    return problems.New()
+}
+```
+
+You can marshal the `Problem` struct to JSON:
+
+```go
+func makeJSON(problem *Problem) ([]byte, error) {
+    return json.Marshal(&problem)
+}
+```
+
+If you want to define a HTTP problem, you can do it like this:
+
+```go
+var problemNotFound = problems.New().SetTitle("NotFound").SetDetail("The requested url was not found.").SetStatus(404).SetType("https://example.com/problem/description")
+```
 
 ## Contributions
 
