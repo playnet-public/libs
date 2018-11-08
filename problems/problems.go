@@ -8,10 +8,10 @@ import (
 //Additional error field can be defined in custom struct implementing the Problem struct
 type Problem struct {
 	Title    string `json:"title"`
-	Detail   string `json:"detail"`
-	Type     string `json:"type"`
-	Instance string `json:"instance"`
-	Status   int    `json:"status"`
+	Detail   string `json:"detail,omitempty"`
+	Type     string `json:"type,omitempty"`
+	Instance string `json:"instance,omitempty"`
+	Status   int    `json:"status,omitempty"`
 }
 
 //Error implements the error interface
