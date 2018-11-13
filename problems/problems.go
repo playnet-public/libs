@@ -27,41 +27,41 @@ func New(title, detail string) *Problem {
 }
 
 //Error returns the error of the problem
-func (p *Problem) Error() string {
+func (p Problem) Error() string {
 	return fmt.Sprintf("Title: %s; Detail: %s", p.Title, p.Detail)
 }
 
 //SetTitle sets the title field of the problem, specified in RFC 7807
-func (p *Problem) SetTitle(title string) *Problem {
+func (p Problem) SetTitle(title string) *Problem {
 	p.Title = title
-	return p
+	return &p
 }
 
 //SetDetail sets the detail field of the problem, specified in RFC 7807
-func (p *Problem) SetDetail(detail string) *Problem {
+func (p Problem) SetDetail(detail string) *Problem {
 	p.Detail = detail
-	return p
+	return &p
 }
 
 //SetType sets the detail field of the problem, specified in RFC 7807
-func (p *Problem) SetType(t string) *Problem {
+func (p Problem) SetType(t string) *Problem {
 	if t == "" {
 		p.Type = DefaultType
 	} else {
 		p.Type = t
 	}
 
-	return p
+	return &p
 }
 
 //SetInstance sets the instance field of the problem, specified in RFC 7807
-func (p *Problem) SetInstance(instance string) *Problem {
+func (p Problem) SetInstance(instance string) *Problem {
 	p.Instance = instance
-	return p
+	return &p
 }
 
 //SetStatus sets the status field of the problem, specified in RFC 7807
-func (p *Problem) SetStatus(status int) *Problem {
+func (p Problem) SetStatus(status int) *Problem {
 	p.Status = status
-	return p
+	return &p
 }
