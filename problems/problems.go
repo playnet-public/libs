@@ -1,6 +1,8 @@
-package problems
+package errors
 
 import (
+	"fmt"
+
 	"github.com/pkg/errors"
 )
 
@@ -15,7 +17,7 @@ type Problem struct {
 	Type     string `json:"type,omitempty"`
 	Instance string `json:"instance,omitempty"`
 	Status   int    `json:"status,omitempty"`
-	err      error
+	cause    error
 }
 
 //Wrap is an alias to github.com/pkg/errors Wrap function. If Problem pointer passed as error, it sets the error and a new message of Problem.
@@ -29,7 +31,7 @@ func Wrap(err error, msg string) error {
 		return errors.Wrap(err, msg)
 	}
 
-	problem.err = errors.Wrap(problem.err, msg)
+	problem.cause = errors.Wrap(problem.cause, msg)
 	return problem
 }
 
@@ -44,7 +46,7 @@ func WithStack(err error) error {
 		return errors.WithStack(err)
 	}
 
-	problem.err = errors.WithStack(problem.err)
+	problem.cause = errors.WithStack(problem.cause)
 	return problem
 }
 
@@ -59,7 +61,7 @@ func WithMessage(err error, msg string) error {
 		return errors.WithMessage(err, msg)
 	}
 
-	problem.err = errors.WithMessage(problem.err, msg)
+	problem.cause = errors.WithMessage(problem.cause, msg)
 	return problem
 }
 
@@ -79,13 +81,34 @@ func newWithError(err error, title, detail string, status int) *Problem {
 		Title:  title,
 		Detail: err.Error(),
 		Status: status,
-		err:    err,
+		cause:  err,
 	}
+}
+
+//Format displays the contained error in a specific format
+func (p Problem) Format(s fmt.State, verb rune) {
+	if p.cause == nil {
+		fmt.Fprint(s, p.Detail)
+		return
+	}
+
+	formatter, ok := p.cause.(fmt.Formatter)
+	if !ok {
+		fmt.Fprint(s, p.Detail)
+		return
+	}
+
+	formatter.Format(s, verb)
+}
+
+//Cause returns the outermost error of Problem
+func (p Problem) Cause() error {
+	return p.cause
 }
 
 //Error returns the error of the problem
 func (p Problem) Error() string {
-	return p.err.Error()
+	return p.cause.Error()
 }
 
 //SetTitle sets the title field of the problem, specified in RFC 7807
