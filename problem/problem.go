@@ -115,19 +115,19 @@ func (p Problem) Error() string {
 }
 
 // SetTitle of a problem error object, specified in RFC 7807
-func (p Problem) SetTitle(title string) Problem {
+func (p *Problem) SetTitle(title string) *Problem {
 	p.Title = title
 	return p
 }
 
 // SetDetail of a problem error object, specified in RFC 7807
-func (p Problem) SetDetail(detail string) Problem {
+func (p *Problem) SetDetail(detail string) *Problem {
 	p.Detail = detail
 	return p
 }
 
 // SetType of a problem error object, specified in RFC 7807
-func (p Problem) SetType(t string) Problem {
+func (p *Problem) SetType(t string) *Problem {
 	if t == "" {
 		p.Type = DefaultType
 	} else {
@@ -138,13 +138,13 @@ func (p Problem) SetType(t string) Problem {
 }
 
 // SetInstance of a problem error object, specified in RFC 7807
-func (p Problem) SetInstance(instance string) Problem {
+func (p *Problem) SetInstance(instance string) *Problem {
 	p.Instance = instance
 	return p
 }
 
 // SetStatus of a problem error object, specified in RFC 7807
-func (p Problem) SetStatus(status int) Problem {
+func (p *Problem) SetStatus(status int) *Problem {
 	p.Status = status
 	return p
 }
