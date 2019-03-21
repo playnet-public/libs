@@ -126,6 +126,46 @@ defer logger.Sync()
 This library requires at least Go 1.9+ and is currently tested against Go 1.9.x, 1.10.x and 1.11.x
 For an up-to-date status on this check [.travis.yml](.travis.yml).
 
+### Problems
+
+`problems` is a small library which implements the RFC7807 error response format standard for e.g. HTTP API's.
+
+The `problems` lib provides a struct called `Problem` and an interface called `ProblemInfo`.
+`Problem` implements the `error` interface, so you can simply return the problem as an error in your application.
+
+```go
+func returnError() error {
+    return problems.New()
+}
+```
+
+You can marshal the `Problem` struct to JSON:
+
+```go
+func makeJSON(problem *Problem) ([]byte, error) {
+    return json.Marshal(&problem)
+}
+```
+
+If you want to define a HTTP problem, you can do it like this:
+
+```go
+var problemNotFound = problems.New().SetTitle("NotFound").SetDetail("The requested url was not found.").SetStatus(404).SetType("https://example.com/problem/description")
+```
+
+For custom fields for more detailed problem information, you can implement `Problem` in your custom struct:
+
+```go
+type customInfo struct {
+    AdditionalField1 bool `json:"additional_field_1"`
+}
+
+type customProblem struct {
+    *problems.Problem
+    *customInfo
+}
+```
+
 ## Contributions
 
 Pull Requests and Issue Reports are welcome.
