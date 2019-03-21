@@ -69,7 +69,7 @@ func WithMessage(err error, msg string) error {
 }
 
 // New problem object for http endpoint errors, specified in RFC 7807
-func New(title, detail string, status int) Problem {
+func New(title, detail string, status int) *Problem {
 	return newWithError(
 		errors.New(detail),
 		title,
@@ -78,8 +78,8 @@ func New(title, detail string, status int) Problem {
 	)
 }
 
-func newWithError(err error, title, detail string, status int) Problem {
-	return Problem{
+func newWithError(err error, title, detail string, status int) *Problem {
+	return &Problem{
 		Type:   DefaultType,
 		Title:  title,
 		Detail: err.Error(),
