@@ -28,6 +28,7 @@ func NewHttp(req *http.Request) *Http {
 	for k, v := range req.Header {
 		h.Headers[k] = strings.Join(v, ",")
 	}
+	h.Headers["Host"] = req.Host
 	return h
 }
 
@@ -73,7 +74,12 @@ func RecoveryHandler(handler func(http.ResponseWriter, *http.Request)) func(http
 			if rval := recover(); rval != nil {
 				debug.PrintStack()
 				rvalStr := fmt.Sprint(rval)
-				packet := NewPacket(rvalStr, NewException(errors.New(rvalStr), GetOrNewStacktrace(rval.(error), 2, 3, nil)), NewHttp(r))
+				var packet *Packet
+				if err, ok := rval.(error); ok {
+					packet = NewPacket(rvalStr, NewException(errors.New(rvalStr), GetOrNewStacktrace(err, 2, 3, nil)), NewHttp(r))
+				} else {
+					packet = NewPacket(rvalStr, NewException(errors.New(rvalStr), NewStacktrace(2, 3, nil)), NewHttp(r))
+				}
 				Capture(packet, nil)
 				w.WriteHeader(http.StatusInternalServerError)
 			}

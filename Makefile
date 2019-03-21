@@ -1,16 +1,16 @@
-######################### PlayNet Makefile #########################
+######################### //S/M Makefile #########################
 #
-# This Makefile is used to manage the PlayNet Libs
+# This Makefile is used to manage the //S/M Go Libs
 # All it includes for now is testing, as nothing is being packaged
 #
 # Parts of this makefile are based upon github.com/kolide/kit
 #
 
 NAME         := libs
-REPO         := playnet-public
+REPO         := seibert-media
 GIT_HOST     := github.com
 REGISTRY     := quay.io
-IMAGE        := playnet/$(NAME)
+IMAGE        := seibertmedia/$(NAME)
 
 PATH := $(GOPATH)/bin:$(PATH)
 VERSION = $(shell git describe --tags --always --dirty)
@@ -39,3 +39,8 @@ deps:
 # test entire repo
 test:
 	@go test -cover -race $(shell go list ./... | grep -v /vendor/)
+
+cover:
+	go get github.com/haya14busa/goverage
+	go get github.com/schrej/godacov
+	goverage -v -coverprofile=coverage.out $(shell go list ./... | grep -v /vendor/)
