@@ -69,7 +69,7 @@ func WithMessage(err error, msg string) error {
 }
 
 // New problem object for http endpoint errors, specified in RFC 7807
-func New(title, detail string, status int) *Problem {
+func New(title, detail string, status int) Problem {
 	return newWithError(
 		errors.New(detail),
 		title,
@@ -78,8 +78,8 @@ func New(title, detail string, status int) *Problem {
 	)
 }
 
-func newWithError(err error, title, detail string, status int) *Problem {
-	return &Problem{
+func newWithError(err error, title, detail string, status int) Problem {
+	return Problem{
 		Type:   DefaultType,
 		Title:  title,
 		Detail: err.Error(),
@@ -115,36 +115,36 @@ func (p Problem) Error() string {
 }
 
 // SetTitle of a problem error object, specified in RFC 7807
-func (p *Problem) SetTitle(title string) *Problem {
+func (p *Problem) SetTitle(title string) Problem {
 	p.Title = title
-	return p
+	return *p
 }
 
 // SetDetail of a problem error object, specified in RFC 7807
-func (p *Problem) SetDetail(detail string) *Problem {
+func (p *Problem) SetDetail(detail string) Problem {
 	p.Detail = detail
-	return p
+	return *p
 }
 
 // SetType of a problem error object, specified in RFC 7807
-func (p *Problem) SetType(t string) *Problem {
+func (p *Problem) SetType(t string) Problem {
 	if t == "" {
 		p.Type = DefaultType
 	} else {
 		p.Type = t
 	}
 
-	return p
+	return *p
 }
 
 // SetInstance of a problem error object, specified in RFC 7807
-func (p *Problem) SetInstance(instance string) *Problem {
+func (p *Problem) SetInstance(instance string) Problem {
 	p.Instance = instance
-	return p
+	return *p
 }
 
 // SetStatus of a problem error object, specified in RFC 7807
-func (p *Problem) SetStatus(status int) *Problem {
+func (p *Problem) SetStatus(status int) Problem {
 	p.Status = status
-	return p
+	return *p
 }
